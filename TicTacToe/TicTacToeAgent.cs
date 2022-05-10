@@ -32,7 +32,7 @@ namespace TicTacToe
         {
             var player = _firstPlayerMove ? _player1 : _player2;
 
-            var move = player.GetNextStep(_board);
+            var move = player.GetNextStep(_board, _firstPlayerMove);
 
             _board = Board.MakeMove(_board, move.x, move.y, _firstPlayerMove);
             _firstPlayerMove = !_firstPlayerMove;

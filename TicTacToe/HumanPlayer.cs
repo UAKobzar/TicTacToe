@@ -8,7 +8,7 @@ namespace TicTacToe
 {
     class HumanPlayer : IPlayer
     {
-        public (int x, int y) GetNextStep(int board)
+        public (int x, int y) GetNextStep(int board, bool isFirstPlayer)
         {
             int x = -1;
             int y = -1;

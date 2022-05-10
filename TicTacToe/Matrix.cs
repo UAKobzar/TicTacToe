@@ -28,31 +28,22 @@ namespace TicTacToe
         public static double[] Randn(int length)
         {
             double[] r = new double[length];
-            for (int i = 0; i < length; i++)
-            {
-                r[i] = Randn();
-            }
-
+            Parallel.For(0, length, (i) => { r[i] = Randn(); });
             return r;
         }
 
         public static double[,] Randn(int length, int length2)
         {
             double[,] r = new double[length, length2];
-            for (int i = 0; i < length; i++)
-            {
-                for (int j = 0; j < length2; j++)
-                {
-                    r[i, j] = Randn();
-                }
-            }
+
+            Parallel.For(0, length, (i) => { Parallel.For(0, length2, (j) => { r[i, j] = Randn(); }); });
 
             return r;
         }
 
         public static double Mean(double[] matrix)
         {
-            return matrix.Sum() / matrix.Length;
+            return matrix.Average();
         }
 
         public static double Std(double[] matrix)
@@ -64,29 +55,23 @@ namespace TicTacToe
 
         public static double[] Minus(double[] matrix, double value)
         {
-            return matrix.Select(v => v - value).ToArray();
+            return matrix.AsParallel().Select(v => v - value).ToArray();
         }
 
         public static double[] Plus(double[] matrix, double value)
         {
-            return matrix.Select(v => v + value).ToArray();
+            return matrix.AsParallel().Select(v => v + value).ToArray();
         }
         public static double[,] Plus(double[,] matrix1, double[,] matrix2)
         {
-            if(matrix1.GetLength(0) != matrix2.GetLength(0) || matrix1.GetLength(1) != matrix2.GetLength(1))
+            if (matrix1.GetLength(0) != matrix2.GetLength(0) || matrix1.GetLength(1) != matrix2.GetLength(1))
             {
                 throw new ArgumentException("matrices are not same size");
             }
 
-            var result = new double[matrix1.GetLength(0),matrix2.GetLength(1)];
+            var result = new double[matrix1.GetLength(0), matrix1.GetLength(1)];
 
-            for (int i = 0; i < matrix1.GetLength(0); i++)
-            {
-                for (int j = 0; j < matrix2.GetLength(1); j++)
-                {
-                    result[i,j] = matrix1[i,j] + matrix2[i,j];
-                }
-            }
+            Parallel.For(0, matrix1.GetLength(0), (i) => { Parallel.For(0, matrix1.GetLength(1), (j) => { result[i, j] = matrix1[i, j] + matrix2[i, j]; }); });
 
             return result;
         }
@@ -94,25 +79,19 @@ namespace TicTacToe
 
         public static double[] Divide(double[] matrix, double value)
         {
-            return matrix.Select(v => v / value).ToArray();
+            return matrix.AsParallel().Select(v => v / value).ToArray();
         }
 
         public static double[] Dot(double[] matrix, double value)
         {
-            return matrix.Select(v => v * value).ToArray();
+            return matrix.AsParallel().Select(v => v * value).ToArray();
         }
 
         public static double[,] Dot(double[,] matrix, double value)
         {
             var result = new double[matrix.GetLength(0), matrix.GetLength(1)];
 
-            for (int i = 0; i < matrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < matrix.GetLength(1); j++)
-                {
-                    result[i,j] = matrix[i, j] * value;
-                }
-            }
+            Parallel.For(0, matrix.GetLength(0), (i) => { Parallel.For(0, matrix.GetLength(1), (j) => { result[i, j] = matrix[i, j] * value; }); });
 
             return result;
         }
@@ -121,20 +100,14 @@ namespace TicTacToe
         {
             var result = new double[matrix.GetLength(0), matrix.GetLength(1)];
 
-            for (int i = 0; i < matrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < matrix.GetLength(1); j++)
-                {
-                    result[i, j] = matrix[i, j] / value;
-                }
-            }
+            Parallel.For(0, matrix.GetLength(0), (i) => { Parallel.For(0, matrix.GetLength(1), (j) => { result[i, j] = matrix[i, j] / value; }); });
 
             return result;
         }
 
         public static double[,] Transpose(double[,] matrix)
         {
-            var result = new double[matrix.GetLength(0), matrix.GetLength(1)];
+            var result = new double[matrix.GetLength(1), matrix.GetLength(0)];
 
             for (int i = 0; i < matrix.GetLength(0); i++)
             {

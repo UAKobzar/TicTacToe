@@ -16,14 +16,14 @@ namespace TicTacToe
         }
 
 
-        public (int x, int y) GetNextStep(int board)
+        public (int x, int y) GetNextStep(int board, bool isFirstPlayer)
         {
-            var inputs = BoardToInput(board);
+            var inputs = BoardToInput(board, isFirstPlayer);
             var outputs = _network.Predict(inputs);
             return OutputsToMove(outputs, board);
         }
 
-        private double[] BoardToInput(int board)
+        private double[] BoardToInput(int board, bool isFirstPlayer)
         {
             double[] result = new double[18];
 
@@ -31,6 +31,11 @@ namespace TicTacToe
             {
                 result[i] = board & 1;
                 board >>= 1;
+            }
+
+            for (int i = 0; i < 18; i+=2)
+            {
+                result[i] = isFirstPlayer ? (result[i] == 0 ? 1 : 0) : result[i];
             }
 
             return result;

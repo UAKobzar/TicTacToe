@@ -7,14 +7,14 @@ using TicTacToe;
 Board.Calculate();
 var teacher = new EvolutionTeacher();
 
-//teacher.Teach(10_000);
+teacher.Teach(10);
 
-//var weigths = teacher.BestNetwork.Save();
+var weigths = teacher.BestNetwork.Save();
 //System.IO.File.WriteAllText("../saved/weights", Newtonsoft.Json.JsonConvert.SerializeObject(weigths));
 
-var weights = Newtonsoft.Json.JsonConvert.DeserializeObject<List<double[,]>>(System.IO.File.ReadAllText(@"D:\progs\TicTacToe\saved\weghts"));
+//var weights = Newtonsoft.Json.JsonConvert.DeserializeObject<List<double[,]>>(System.IO.File.ReadAllText(@"D:\progs\TicTacToe\saved\weghts"));
 var network = teacher.BestNetwork;
-network.Load(weights);
+network.Load(weigths);
 
 var nnplayer = new NNPlayer(teacher.BestNetwork);
 var humanPlayer = new HumanPlayer();

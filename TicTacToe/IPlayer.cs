@@ -8,6 +8,6 @@ namespace TicTacToe
 {
     interface IPlayer
     {
-        (int x, int y) GetNextStep(int board);
+        (int x, int y) GetNextStep(int board, bool isFirstPlayer);
     }
 }

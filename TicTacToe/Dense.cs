@@ -27,7 +27,7 @@ namespace TicTacToe
 
         private Func<double, double> GetActivationFunction(ActivationFunction activationFunction)
         {
-            var tahn = (double x) => { return (Math.Exp(x) - Math.Exp(-x)) / (Math.Exp(x) + Math.Exp(-x)); };
+            Func<double, double> tahn = (double x) => { return (Math.Exp(x) - Math.Exp(-x)) / (Math.Exp(x) + Math.Exp(-x)); };
 
             switch (activationFunction)
             {
@@ -66,18 +66,18 @@ namespace TicTacToe
 
         public double[] GetOutput(double[] input)
         {
-            if (input?.Length != Weights.GetLength(1))
+            if (input?.Length != Weights.GetLength(1) - 1)
                 throw new ArgumentException("Wrong input length");
 
             var result = new double[Weights.GetLength(0)];
 
             for (int i = 0; i < Weights.GetLength(0); i++)
             {
-                for (int j = 0; j < Weights.GetLength(1); j++)
+                for (int j = 0; j < Weights.GetLength(1) - 1; j++)
                 {
                     result[i] += input[j] * Weights[i, j];
                 }
-
+                result[i] += Weights[i, Weights.GetLength(1) - 1];
                 result[i] = _activationFunction(result[i]);
             }
 
