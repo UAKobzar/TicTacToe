@@ -10,7 +10,7 @@ namespace TicTacToe
     {
         private readonly Network _network;
 
-        public  NNPlayer(Network network)
+        public NNPlayer(Network network)
         {
             _network = network;
         }
@@ -25,17 +25,22 @@ namespace TicTacToe
 
         private double[] BoardToInput(int board, bool isFirstPlayer)
         {
-            double[] result = new double[18];
+            double[] result = new double[27];
 
-            for (int i = 0; i < 18; i++)
+            for (int i = 0; i < 27; i += 3)
             {
-                result[i] = board & 1;
-                board >>= 1;
-            }
+                var bits = board & 3;
+                board >>= 2;
 
-            for (int i = 0; i < 18; i+=2)
-            {
-                result[i] = isFirstPlayer ? (result[i] == 0 ? 1 : 0) : result[i];
+                bool isEmpty = bits < 2;
+                bool isX = bits == 2;
+                bool isO = bits == 3;
+
+                bool isMe = isFirstPlayer ? isX : isO;
+
+                result[i] = isEmpty ? 1 : 0;
+                result[i + 1] = (!isEmpty && isMe) ? 1 : 0;
+                result[i + 2] = (!isEmpty && !isMe) ? 1 : 0;
             }
 
             return result;
@@ -45,7 +50,7 @@ namespace TicTacToe
         {
             var possibleMoves = Board.GetPosiibleMoves(board);
 
-            var move = possibleMoves.Select(m => new { move = m, prop = outputs[m.Item1 * 3 + m.Item2] }).OrderByDescending(m=>m.prop).First().move;
+            var move = possibleMoves.Select(m => new { move = m, prop = outputs[m.Item1 * 3 + m.Item2] }).OrderByDescending(m => m.prop).First().move;
 
             return (move.Item1, move.Item2);
         }

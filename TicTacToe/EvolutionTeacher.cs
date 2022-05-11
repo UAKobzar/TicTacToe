@@ -112,7 +112,7 @@ namespace TicTacToe
 
         private Network CreateRandomPlayerNetwork()
         {
-            return CreatePlayerNetwork(new List<double[,]>() { Matrix.Randn(9, 19) });
+            return CreatePlayerNetwork(new List<double[,]>() { Matrix.Randn(9, 28) });
         }
 
         private Network CreatePlayerNetwork(List<double[,]> weights)
